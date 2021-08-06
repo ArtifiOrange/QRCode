@@ -1,15 +1,19 @@
+// Author ArtifiOrange    All copyright reserved
+// V0.7 support only to QRCode Version 11 and could only encode Cap Num and few punctuation
+// upload 2021/08/07 00:59 in FZU
+
 #include "QRCode.h"
 #include <stdio.h>
 
 
-const u16 MaxNumLen[5][11] = { {208,359,567,807,1079,1383,1568,1936,2336,2768,3232} ,//Êı¾İÎ»Êı
-	{25,47,77,114,154,195,224,279,335,395,468} ,//×î´ó×ÖÄ¸×Ö·ûÎ»Êı
+const u16 MaxNumLen[5][11] = { {208,359,567,807,1079,1383,1568,1936,2336,2768,3232} ,//æ•°æ®ä½æ•°
+	{25,47,77,114,154,195,224,279,335,395,468} ,//æœ€å¤§å­—æ¯å­—ç¬¦ä½æ•°
 	{20,38,61,90,112,154,178,221,262,311,366},
 	{16,29,47,67,87,108,125,157,189,221,259},
 	{10,20,35,50,64,84,93,122,143,174,200}
 };
 
-//const u16 DataNum[4][11] = {	//¸÷¾À´í°æ±¾Êı¾İÂëÊı
+//const u16 DataNum[4][11] = {	//å„çº é”™ç‰ˆæœ¬æ•°æ®ç æ•°
 //	{19,34,55,80,108,136,156,194,232,274,324},
 //	{16,28,44,64,86,108,124,154,182,216,254},
 //	{13,22,34,48,62,76,88,110,132,154,180},
@@ -17,10 +21,10 @@ const u16 MaxNumLen[5][11] = { {208,359,567,807,1079,1383,1568,1936,2336,2768,32
 //};
 
 
-// Âë×Ö·Ö¿é±í
-//ÏÈ·ÖµÈ¼¶ÔÚ°´¾À´í¼¶±ğÌîÈë ¼¶±ğË÷Òı[0:3]
-//(µÍËÄÎ»ÎªµÚÒ»¸ö¿éÎ»ÖÃ£¬¸ßËÄÎ»Îª¸Ã¾À´í¼¶±ğ¿éÀàÊı)
-//ºó½Ó·Ö¿éÏêÇé Èı¸ö×Ö·ûÒ»×é[¿éÊı£¬¿é×ÜÂëÊı£¬¿éÊı¾İÂëÊı]
+// ç å­—åˆ†å—è¡¨
+//å…ˆåˆ†ç­‰çº§åœ¨æŒ‰çº é”™çº§åˆ«å¡«å…¥ çº§åˆ«ç´¢å¼•[0:3]
+//(ä½å››ä½ä¸ºç¬¬ä¸€ä¸ªå—ä½ç½®ï¼Œé«˜å››ä½ä¸ºè¯¥çº é”™çº§åˆ«å—ç±»æ•°)
+//åæ¥åˆ†å—è¯¦æƒ… ä¸‰ä¸ªå­—ç¬¦ä¸€ç»„[å—æ•°ï¼Œå—æ€»ç æ•°ï¼Œå—æ•°æ®ç æ•°]
 const u8 V1[] = {0x11,0x12,0x13,0x14,1,26,19,1,26,16,1,26,13,1,26,9};
 const u8 V2[] = {0x11,0x12,0x13,0x14,1,44,34,1,44,28,1,44,22,1,44,16};
 const u8 V3[] = {0x11,0x12,0x13,0x14,1,70,55,1,70,44,2,35,17,2,35,13};
@@ -28,7 +32,7 @@ const u8 V4[] = {0x11,0x12,0x13,0x14,1,100,80,2,50,32,2,50,24,4,25,9};
 const u8 V5[] = {0x11,0x12,0x23,0x25,1,134,108,2,67,43,2,33,15,2,34,16,2,33,11,2,34,12};
 const u8 V6[] = {0x11,0x12,0x13,0x14,2,86,68,4,43,27,4,43,19,4,43,15};
 const u8 V7[] = {0x11,0x12,0x23,0x25,2,98,78,4,49,31,2,32,14,4,33,15,4,39,13,1,40,14};
-const u8 V8[] = {0x11};//ÓĞ¿Õ²¹°É
+const u8 V8[] = {0x11};//æœ‰ç©ºè¡¥å§
 const u8 V9[1];
 const u8 V10[1];
 const u8 V11[1];
@@ -134,7 +138,7 @@ u8 QR_Mask = 0;
 u8 QR_CorLevel = QR_CORRECTION_LEVEL;
 u8 QR_EncodeMode = QR_ENCODE_MODE;
 
-//²é±í»ñµÃ°æ±¾
+//æŸ¥è¡¨è·å¾—ç‰ˆæœ¬
 QRVersion QR_GetVersion(u8 *raw,u8 corlevel)
 {
 
@@ -154,7 +158,7 @@ QRVersion QR_GetVersion(u8 *raw,u8 corlevel)
 }
 
 
-//»ñÈ¡ÄÚÈİ·ûºÏºÎÖÖ±àÂë
+//è·å–å†…å®¹ç¬¦åˆä½•ç§ç¼–ç 
 void QR_AnaData(u8* raw, u16 len)
 {
 
@@ -168,7 +172,7 @@ void QR_AnaData(u8* raw, u16 len)
 
 }
 
-// ¶Ô¾À´íµÈ¼¶ ÑÚÂëĞÎÊ½½øĞĞÉèÖÃ
+// å¯¹çº é”™ç­‰çº§ æ©ç å½¢å¼è¿›è¡Œè®¾ç½®
 void QR_Config(u8 CorLevel, u8 Mask)
 {
 	QR_CorLevel = CorLevel;
@@ -186,7 +190,7 @@ void QR_DataCodeEncode(CorEncodeTypedef** blocks, BitFlow* dataFlow)
 	u8 temp = blocks[0]->InfoLen;
 	u8 IsInfo=1;
 
-	if (writeP) {   // Çø·ÖÊı¾İÂëÓë¾À´íÂë
+	if (writeP) {   // åŒºåˆ†æ•°æ®ç ä¸çº é”™ç 
 		IsInfo = 0;
 		temp = dataFlow->MemLen>>3;
 	}
@@ -227,16 +231,16 @@ CorEncodeTypedef** QR_GetBlocks(u8 version, u8 corlevel)
 {
 
 	u8 loop;
-	u8 blockInfo=BlockDivide[version][corlevel];		//È¡³ö¿éÖÖÀà Î»ÖÃĞÅÏ¢
+	u8 blockInfo=BlockDivide[version][corlevel];		//å–å‡ºå—ç§ç±» ä½ç½®ä¿¡æ¯
 	CorEncodeTypedef** CorBlocks;
 
-	if ((blockInfo>>4)==1)	BlockNum = BlockDivide[version][(blockInfo&0x07)*3+1];	//Ò»ÖÖ¿é
-	else BlockNum = BlockDivide[version][(blockInfo & 0x07)*3+1]+ BlockDivide[version][(blockInfo & 0x07)*3+4];	//Á½ÖÖ¿é
+	if ((blockInfo>>4)==1)	BlockNum = BlockDivide[version][(blockInfo&0x07)*3+1];	//ä¸€ç§å—
+	else BlockNum = BlockDivide[version][(blockInfo & 0x07)*3+1]+ BlockDivide[version][(blockInfo & 0x07)*3+4];	//ä¸¤ç§å—
 
 	CorBlocks = calloc(BlockNum,4);
 	blockInfo = (blockInfo << 4)+ BlockDivide[version][(blockInfo&0x07)*3+1];
 
-	for ( loop = 0; loop < BlockNum; loop++)	//»ñÈ¡Ã¿¿éĞÅÏ¢
+	for ( loop = 0; loop < BlockNum; loop++)	//è·å–æ¯å—ä¿¡æ¯
 	{
 		CorBlocks[loop] = calloc(1,sizeof(CorEncodeTypedef));
 		if (blockInfo & 0x07) {
@@ -268,11 +272,11 @@ void QR_CorCodeEncode(CorEncodeTypedef* cb)
 	//if (corNum > cb->InfoLen)operaCodeLen = corNum;
 	//else operaCodeLen = cb->InfoLen - 1;
 
-	for ( loop = 0; loop < cb->InfoLen; loop++)	//Êı¾İÂëÓĞ¼¸Ïî¾Í½øĞĞ¼¸´ÎÔËËã
+	for ( loop = 0; loop < cb->InfoLen; loop++)	//æ•°æ®ç æœ‰å‡ é¡¹å°±è¿›è¡Œå‡ æ¬¡è¿ç®—
 	{
 
 		operaA = cb->OperaPoly[0];
-		for ( loop2 = 0; loop2 < corNum; loop2++)	//±éÀúinfocode
+		for ( loop2 = 0; loop2 < corNum; loop2++)	//éå†infocode
 		{
 			
 			temp = cb->GenPoly[loop2+1] + IntToGalois[operaA];
@@ -334,10 +338,10 @@ u8* QR_CharEncode(u8* raw,QRCode* qrcode)
 	dataFlow.FlowLen = 0;
 	
 	tempBuf[0] = 0x02;
-	BitFlowAppend(&dataFlow, tempBuf,4);	//Ä£Ê½±êÊ¶·û
+	BitFlowAppend(&dataFlow, tempBuf,4);	//æ¨¡å¼æ ‡è¯†ç¬¦
 	tempBuf[0] = (u8)DataNum;
 	tempBuf[1] = 0;
-	BitFlowAppend(&dataFlow,tempBuf, DataNumLen[qrcode->Version>9?qrcode->Version>26?2:1:0][1]);	//×Ö·ûÊı±êÊ¶·û
+	BitFlowAppend(&dataFlow,tempBuf, DataNumLen[qrcode->Version>9?qrcode->Version>26?2:1:0][1]);	//å­—ç¬¦æ•°æ ‡è¯†ç¬¦
 
 	
 	for (loopP = 0; loopP < DataNum; loopP++)
@@ -367,7 +371,7 @@ u8* QR_CharEncode(u8* raw,QRCode* qrcode)
 		else temp2 = temp1*45;
 	}
 
-	if (loopP&0x0001)	//µ¥ÊıÌí¼ÓÎ²²¿
+	if (loopP&0x0001)	//å•æ•°æ·»åŠ å°¾éƒ¨
 	{
 		tempBuf[0] = temp1;
 		BitFlowAppend(&dataFlow, tempBuf, 6);
@@ -403,7 +407,7 @@ void QR_SetData(u8** qrFlow,u8** mask, BitFlow* dataFlow,u8 width)
 	for ( loop = 0; loop < dataFlow->MemLen;)
 	{
 		
-		if (mask[setY >> 3][setX] & (0x01 << (setY & 0x07)));//maskÓĞÔòÌø¹ı
+		if (mask[setY >> 3][setX] & (0x01 << (setY & 0x07)));//maskæœ‰åˆ™è·³è¿‡
 		/*else if (dataFlow->Flow[writeP] & (0x01 << offset--)) {
 			QR_SetDot(qrFlow,setX,setY);
 			QR_SetDot(mask, setX, setY);
@@ -422,7 +426,7 @@ void QR_SetData(u8** qrFlow,u8** mask, BitFlow* dataFlow,u8 width)
 		}
 
 		
-		if (direction==0)	//Õı³£ÒÆ¶¯
+		if (direction==0)	//æ­£å¸¸ç§»åŠ¨
 		{
 			setX--;
 			direction = 1;
@@ -442,7 +446,7 @@ void QR_SetData(u8** qrFlow,u8** mask, BitFlow* dataFlow,u8 width)
 			direction = 2;
 		}
 
-		if (setY == 255)		//»»ÁĞ
+		if (setY == 255)		//æ¢åˆ—
 		{
 			if (setX==8)
 			{
@@ -479,7 +483,7 @@ void QR_SetVersion(QRCode qr)
 	u8 loop2 = qr.Version*4+16;
 	u16 versionFlow = VersionFlow[qr.CorLevel -1][qr.Mask];
 
-	for ( loop = 0; loop < 6; loop++)	//0-5Î»
+	for ( loop = 0; loop < 6; loop++)	//0-5ä½
 	{
 		if (versionFlow & 0x8000)
 		{
@@ -552,7 +556,7 @@ u8* QR_GenPloy(u8 CorNum)
 
 	gp = calloc(CorNum + 1, 1);
 
-	for ( loop = 0; loop < 8; loop++)	//¾À´íÂë×îÉÙÎª7 Éú³É¶àÏîÊ½×îÉÙÎª8Ïî
+	for ( loop = 0; loop < 8; loop++)	//çº é”™ç æœ€å°‘ä¸º7 ç”Ÿæˆå¤šé¡¹å¼æœ€å°‘ä¸º8é¡¹
 	{
 		gp[loop] = C7[loop];
 	}
@@ -592,18 +596,18 @@ void QR_SetFormat(u8** flow, u8** mask, u8 version)
 	u8* tempP;
 	u8 temp3;
 
-	//Ìí¼Ó²éÕÒ¿éÓë·Ö¸ô·û
+	//æ·»åŠ æŸ¥æ‰¾å—ä¸åˆ†éš”ç¬¦
 	QR_PastePattern(FindPattern, 0, 0, flow, mask);
 	QR_PastePattern(FindPattern, wide-7, 0, flow, mask);
 	QR_PastePattern(FindPattern, 0,wide-7,  flow, mask);
 
 	
 
-	//Ìí¼Ó¶ÔÆëÍ¼°¸
+	//æ·»åŠ å¯¹é½å›¾æ¡ˆ
 	temp1 = (version / 7) + 2;
 	if (temp1 == 2)tempP = &(AlignPatPos[temp1*version-2]);
 	else if (temp1 == 3)tempP = &(AlignPatPos[temp1 * version - 9]);
-	else if (temp1 == 4)tempP = &(AlignPatPos[temp1 * version - 7]);//ÒÔÏÂÎ´¸üÕı
+	else if (temp1 == 4)tempP = &(AlignPatPos[temp1 * version - 7]);//ä»¥ä¸‹æœªæ›´æ­£
 	else if (temp1 == 5)tempP = &(AlignPatPos[temp1 * version - 7]);
 	else if (temp1 == 6)tempP = &(AlignPatPos[temp1 * version - 7]);
 	else tempP = &(AlignPatPos[temp1 * version - 7]);
@@ -622,7 +626,7 @@ void QR_SetFormat(u8** flow, u8** mask, u8 version)
 	
 
 
-	//Ìí¼ÓÊ±ĞòÏß
+	//æ·»åŠ æ—¶åºçº¿
 	temp1 = wide - 7;
 	for ( loopx = 8; loopx < temp1; loopx+=2)
 	{
@@ -639,8 +643,8 @@ void QR_SetFormat(u8** flow, u8** mask, u8 version)
 
 
 
-	//Ìí¼ÓÆäËû¹Ì¶¨¸ñÊ½
-	QR_SetDot(flow, 8, wide-8);//  Ìí¼Ó½Çµã
+	//æ·»åŠ å…¶ä»–å›ºå®šæ ¼å¼
+	QR_SetDot(flow, 8, wide-8);//  æ·»åŠ è§’ç‚¹
 	temp1 = 9;
 	for ( loopx= 0; loopx < temp1; loopx++)
 	{
@@ -660,7 +664,7 @@ void QR_SetFormat(u8** flow, u8** mask, u8 version)
 		QR_SetDot(mask, wide-7+loopx, 8);
 	}
 
-	if (version>6)	//°æ±¾´óÓÚ8Ìí¼ÓÔ¤Áô°æ±¾ĞÅÏ¢Çø
+	if (version>6)	//ç‰ˆæœ¬å¤§äº8æ·»åŠ é¢„ç•™ç‰ˆæœ¬ä¿¡æ¯åŒº
 	{
 		temp1 = 6;
 		for (loopx = 0; loopx < temp1; loopx++)
@@ -736,51 +740,51 @@ void QR_PastePattern(u8* pat, u8 x, u8 y, u8** flow,u8** mask)
 
 u8 BitFlowAppend(BitFlow* bf,u8* appendFlow, u16 len)
 {
-	// ÕıĞò×·¼Ó°æ±¾
+	// æ­£åºè¿½åŠ ç‰ˆæœ¬
 	//u16 loop,loopLen = len>>3;
-	//u8 offset = (u8)bf->FlowLen & 0x07;	//»ñµÃ¶àÓà±ÈÌØÊı
+	//u8 offset = (u8)bf->FlowLen & 0x07;	//è·å¾—å¤šä½™æ¯”ç‰¹æ•°
 	//u8 writeP = bf->FlowLen >> 3;
-	//if ((bf->FlowLen + len) > bf->MemLen)return QRError_MEMSIZE;	//³¤¶ÈÔ½½çÅĞ¶Ï
-	//if (offset)	//´æÔÚÆ«ÖÃ·Ö²½¸´ÖÆ
+	//if ((bf->FlowLen + len) > bf->MemLen)return QRError_MEMSIZE;	//é•¿åº¦è¶Šç•Œåˆ¤æ–­
+	//if (offset)	//å­˜åœ¨åç½®åˆ†æ­¥å¤åˆ¶
 	//{
 	//	for (loop = 0; loop < loopLen; loop++)
 	//	{
 	//		bf->Flow[writeP++] |= appendFlow[loop] << offset;
 	//		bf->Flow[writeP] |= appendFlow[loop] >> offset;
 	//	}
-	//	bf->Flow[writeP] |= appendFlow[loop] << offset;  //²¹ÆëÎ²×Ö½Ú
+	//	bf->Flow[writeP] |= appendFlow[loop] << offset;  //è¡¥é½å°¾å­—èŠ‚
 	//	if (offset + (len & 0x0007) > 8)bf->Flow[++writeP] |= appendFlow[loop] >> (8-offset);
 	//	
 	//}
-	//else    //¶ÔÆëÖ±½Ó¸´ÖÆ
+	//else    //å¯¹é½ç›´æ¥å¤åˆ¶
 	//{
 	//	for ( loop = 0; loop < loopLen; loop++)
 	//	{
 	//		bf->Flow[writeP++] = appendFlow[loop];
 	//	}
-	//	bf->Flow[writeP] |= appendFlow[loop];  //²¹ÆëÎ²×Ö½Ú
+	//	bf->Flow[writeP] |= appendFlow[loop];  //è¡¥é½å°¾å­—èŠ‚
 	//}
 	//
 	//bf->FlowLen += len;
 	//offset = (u8)bf->FlowLen & 0x07;
-	//if (offset != 0)bf->Flow[(bf->FlowLen >> 3)] &= 0xFF >> offset;  //ÇåÀíÎ²²¿
-	//ÉÏÎªÕıĞò×·¼Ó°æ±¾
-	// Êµ¼ÊĞèÒªÄæĞò×·¼Ó
+	//if (offset != 0)bf->Flow[(bf->FlowLen >> 3)] &= 0xFF >> offset;  //æ¸…ç†å°¾éƒ¨
+	//ä¸Šä¸ºæ­£åºè¿½åŠ ç‰ˆæœ¬
+	// å®é™…éœ€è¦é€†åºè¿½åŠ 
 	u16 loop;
 	u8* writeP;
 	writeP = bf->Flow + (bf->FlowLen >> 3);
-//	u8 offsetW = bf->FlowLen & 0x07;	//ÕıĞ´
-	u8 offsetW = 7 - (bf->FlowLen & 0x07);   //µ¹Ğ´
+//	u8 offsetW = bf->FlowLen & 0x07;	//æ­£å†™
+	u8 offsetW = 7 - (bf->FlowLen & 0x07);   //å€’å†™
 	u8* readP;
 	u8 offsetR = (len - 1) & 0x07;
 
 	readP = appendFlow + ((len - 1) >> 3);
 	
 	
-	if ((bf->FlowLen + len) > bf->MemLen)return QRError_MEMSIZE;	//³¤¶ÈÔ½½çÅĞ¶Ï
+	if ((bf->FlowLen + len) > bf->MemLen)return QRError_MEMSIZE;	//é•¿åº¦è¶Šç•Œåˆ¤æ–­
 	for (loop=0;loop<len;loop++) {
-	//	*writeP |= (((*readP) >> offsetR--) & 0x01) << offsetW++;	//ÕıĞ´
-		*writeP |= (((*readP) >> offsetR--) & 0x01) << offsetW--;	//µ¹Ğ´
+	//	*writeP |= (((*readP) >> offsetR--) & 0x01) << offsetW++;	//æ­£å†™
+		*writeP |= (((*readP) >> offsetR--) & 0x01) << offsetW--;	//å€’å†™
 		if (offsetR==255)
 		{
 			readP--;
@@ -846,8 +850,8 @@ void BitFlowPrint(u8* flow,u16 len)
 	for (loop = 0; loop < len; loop++)
 	{
 		if ((*readP) & (0x01 << offset++))putchar('1');
-	//	if (bf.Flow[loop >> 3]&(0x01<<(u8)loop))putchar('1');      //µÍÎ»µ½¸ßÎ»
-	//	if (bf.Flow[loop >> 3] & (0x80 >> loop%8))putchar('1');   //¸ßÎ»µ½µÍÎ»
+	//	if (bf.Flow[loop >> 3]&(0x01<<(u8)loop))putchar('1');      //ä½ä½åˆ°é«˜ä½
+	//	if (bf.Flow[loop >> 3] & (0x80 >> loop%8))putchar('1');   //é«˜ä½åˆ°ä½ä½
 		else putchar('0');
 		if (offset == 8) {
 			offset = 0;
@@ -895,7 +899,7 @@ void QR_Encode(u8* raw)
 #endif // LOG
 
 
-	//	»ñÈ¡ĞÅÏ¢±àÂë
+	//	è·å–ä¿¡æ¯ç¼–ç 
 	InfoCode = QR_CharEncode(raw, &qrcode);
 	
 
@@ -915,7 +919,7 @@ void QR_Encode(u8* raw)
 #endif // LOG
 
 	
-	//	»ñÈ¡·Ö¿é·½Ê½	Ë³±ã¼ÓÉÏÁËÉú³É¶àÏîÊ½
+	//	è·å–åˆ†å—æ–¹å¼	é¡ºä¾¿åŠ ä¸Šäº†ç”Ÿæˆå¤šé¡¹å¼
 	Blocks = QR_GetBlocks(qrcode.Version-1,qrcode.CorLevel-1);
 
 
@@ -932,7 +936,7 @@ void QR_Encode(u8* raw)
 #endif // LOG
 
 
-	//	½«infoCodeÌîÈë·Ö¿é 
+	//	å°†infoCodeå¡«å…¥åˆ†å— 
 	tempP = InfoCode;
 	for ( loop = 0; loop < BlockNum; loop++)
 	{
@@ -940,7 +944,7 @@ void QR_Encode(u8* raw)
 		tempP += Blocks[loop]->InfoLen;
 	}
 
-	dataFlow.MemLen = MaxNumLen[0][qrcode.Version - 1];	//½»Ö¯ĞÅÏ¢Âë
+	dataFlow.MemLen = MaxNumLen[0][qrcode.Version - 1];	//äº¤ç»‡ä¿¡æ¯ç 
 	dataFlow.Flow = calloc((dataFlow.MemLen >> 3) + 1, 1);
 	dataFlow.FlowLen = 0;
 	QR_DataCodeEncode(Blocks,&dataFlow);
@@ -962,7 +966,7 @@ void QR_Encode(u8* raw)
 	printf("\n---Generate CorrectionCode---\n");
 #endif // LOG
 
-	// Éú³É¾À´íÂë
+	// ç”Ÿæˆçº é”™ç 
 	for ( loop = 0; loop < BlockNum; loop++)
 	{
 		QR_CorCodeEncode(Blocks[loop]);
@@ -980,7 +984,7 @@ void QR_Encode(u8* raw)
 #endif // LOG
 
 
-	QR_DataCodeEncode(Blocks, &dataFlow);//  ½»Ö¯¾À´íÂë
+	QR_DataCodeEncode(Blocks, &dataFlow);//  äº¤ç»‡çº é”™ç 
 
 #ifdef LOG
 	for (loop = 0; loop < dataFlow.MemLen >> 3; loop++)
@@ -998,7 +1002,7 @@ void QR_Encode(u8* raw)
 	free(Blocks);
 
 	
-	//ÉêÇëÄÚ´æ   ÁĞºáÊ½
+	//ç”³è¯·å†…å­˜   åˆ—æ¨ªå¼
 	loop = (qrcode.Version << 2) + 17;
 	loop2 = (qrcode.Version >> 1) + 3;
 	
@@ -1010,13 +1014,13 @@ void QR_Encode(u8* raw)
 		backup[temp] = calloc(loop, 1);
 	}
 	
-	// ÌîÈë»ù±¾¸ñÊ½
+	// å¡«å…¥åŸºæœ¬æ ¼å¼
 	QR_SetFormat(qrcode.bitFlow, backup, qrcode.Version);	
 	QR_CodePrinter(qrcode);
 	//qrcode.bitFlow = mask;
 	//QR_CodePrinter(qrcode);
 	
-	QR_SetData(qrcode.bitFlow,backup,&dataFlow,qrcode.Version*4+17);   //ÌîÈëÊı¾İÂë
+	QR_SetData(qrcode.bitFlow,backup,&dataFlow,qrcode.Version*4+17);   //å¡«å…¥æ•°æ®ç 
 
 	free(dataFlow.Flow);
 
@@ -1046,25 +1050,25 @@ void QR_CodePrinter(QRCode qr)
 	printf("\n  ");
 	for ( loop = 0; loop < width+2; loop++)
 	{
-		printf("¡õ");
+		printf("â–¡");
 	}
 	printf("\n");
 	for (loop = 0; loop < width;loop++)
 	{
 		
-		printf("%2d¡õ",loop);
+		printf("%2dâ–¡",loop);
 		for ( loop2 = 0; loop2 < width; loop2++)
 		{
-			if (qr.bitFlow[loop >> 3][loop2] & (0x01 << (loop & 0x07)))printf("¡ö");
+			if (qr.bitFlow[loop >> 3][loop2] & (0x01 << (loop & 0x07)))printf("â– ");
 			else printf("  ");
 		}
-		printf("¡õ%2d",loop);
+		printf("â–¡%2d",loop);
 		printf("\n");
 	}
 	printf("  ");
 	for (loop = 0; loop < width + 2; loop++)
 	{
-		printf("¡õ");
+		printf("â–¡");
 	}
 	printf("\n\n");
 }
