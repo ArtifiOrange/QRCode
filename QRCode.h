@@ -1,3 +1,8 @@
+// Author ArtifiOrange    All copyright reserved
+// V0.7 support only to QRCode Version 11 and could only encode Cap Num and few punctuation
+// upload 2021/08/07 00:59 in FZU
+
+
 
 #ifndef __QRCODE_H_
 #define __QRCODE_H_
@@ -59,10 +64,10 @@ typedef struct {
 
 typedef struct {
 
-	u8 BlockNum;		//×Ü¿éÊı
-	u8* BlockInfo;		//Ã¿¿éĞÅÏ¢(Êı¾İÂë³¤¶È£¬¾À´íÂë³¤¶È) µÚÒ»¿é[0:1] µÚ¶ş¿é[2:3] ......
-	u8** InfoCode;		//Êı¾İÂë	
-	u8** CorCode;		//¾À´íÂë
+	u8 BlockNum;		//æ€»å—æ•°
+	u8* BlockInfo;		//æ¯å—ä¿¡æ¯(æ•°æ®ç é•¿åº¦ï¼Œçº é”™ç é•¿åº¦) ç¬¬ä¸€å—[0:1] ç¬¬äºŒå—[2:3] ......
+	u8** InfoCode;		//æ•°æ®ç 	
+	u8** CorCode;		//çº é”™ç 
 
 }BlockCode;
 
